@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">JournalApp</string>
+    <string name="welcome_to_my_journal_app">Welcome To My Journal App</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="sing_up">Sing up</string>
+    <string name="create_an_account">New To Journal App Create An Account</string>
+    <string name="create_account">Create Account</string>
+    <string name="user_name">User Name</string>
+    <string name="todo">TODO</string>
+    <string name="post_title">Post Title</string>
+    <string name="post_date">Post Date</string>
+    <string name="post_user_name">User Name</string>
+    <string name="thoughts">Thoughts</string>
+    <string name="save_post">Save Post</string>
+    <string name="already_have_account">Already have account</string>
+    <string name="new_to_app">New to App</string>
+    <string name="there_is_not_post">There is no post</string>
+    <string name="add_journal">Add Journal</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="title">Title</string>
+    <string name="description">Description...</string>
+    <string name="date_created">Date Created</string>
+    <string name="camera">Camera</string>
+    <string name="select_image_from_gallary">Select Image from gallary</string>
+    <string name="date">date</string>
+</resources>

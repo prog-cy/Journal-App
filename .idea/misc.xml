@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/MobileAppDev/JournalApp/app/src/main/res/drawable/addjournal_layout_background.xml" value="0.171" />
+        <entry key="..\:/MobileAppDev/JournalApp/app/src/main/res/drawable/back_ground_of_login_layout.xml" value="0.171" />
+        <entry key="..\:/MobileAppDev/JournalApp/app/src/main/res/drawable/ic_menu_camera.xml" value="0.171" />
+        <entry key="..\:/MobileAppDev/JournalApp/app/src/main/res/drawable/input_outline.xml" value="0.171" />
+        <entry key="..\:/MobileAppDev/JournalApp/app/src/main/res/drawable/login_activity_background.xml" value="0.171" />
+        <entry key="..\:/MobileAppDev/JournalApp/app/src/main/res/layout/activity_add_journal.xml" value="0.19166666666666668" />
+        <entry key="..\:/MobileAppDev/JournalApp/app/src/main/res/layout/activity_journal_list.xml" value="0.19166666666666668" />
+        <entry key="..\:/MobileAppDev/JournalApp/app/src/main/res/layout/activity_main.xml" value="0.19166666666666668" />
+        <entry key="..\:/MobileAppDev/JournalApp/app/src/main/res/layout/activity_sing_up.xml" value="0.19166666666666668" />
+        <entry key="..\:/MobileAppDev/JournalApp/app/src/main/res/layout/journal_row.xml" value="0.19166666666666668" />
+        <entry key="..\:/MobileAppDev/JournalApp/app/src/main/res/menu/add_journal_menu.xml" value="0.19166666666666668" />
+        <entry key="..\:/MobileAppDev/JournalApp/app/src/main/res/menu/menu.xml" value="0.19166666666666668" />
+        <entry key="..\:/MobileAppDev/JournalApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.171" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
