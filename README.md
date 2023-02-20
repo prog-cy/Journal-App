@@ -6,6 +6,13 @@ An Android Application to maintain photos and writing some thoughts about photos
 - Android Studio
 - JDK(Java Development Key)
 
+## Permissions
+
+**Add Permissions inside Manifests**
+
+- <uses-permission android:name="android.permission.INTERNET" />
+- <uses-permission android:name="android.permission.CAMERA" />
+
 ## Tech Stack
 
 **Design:** XML(Extensible Markup Language)
