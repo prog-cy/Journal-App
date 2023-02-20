@@ -10,8 +10,8 @@ An Android Application to maintain photos and writing some thoughts about photos
 
 **Add Permissions inside Manifests**
 
-- <uses-permission android:name="android.permission.INTERNET" />
-- <uses-permission android:name="android.permission.CAMERA" />
+- uses-permission android:name="android.permission.INTERNET"
+- uses-permission android:name="android.permission.CAMERA"
 
 ## Tech Stack
 
