@@ -1,5 +1,6 @@
 package com.example.firesbaseauthenticationservice.journalapp.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,6 +9,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +18,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.firesbaseauthenticationservice.journalapp.JournalListActivity;
+import com.example.firesbaseauthenticationservice.journalapp.MainActivity;
 import com.example.firesbaseauthenticationservice.journalapp.R;
 import com.example.firesbaseauthenticationservice.journalapp.model.Journal;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
@@ -30,6 +46,8 @@ public class JournalAdapter extends RecyclerView.Adapter<JournalAdapter.JournalV
 
     private Context context;
     private final ArrayList<Journal> journalList;
+    private final FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private final CollectionReference collectionReference = firestore.collection("Journal");
 
     //Constructor
     public JournalAdapter(Context context, ArrayList<Journal> journalList) {
@@ -104,6 +122,45 @@ public class JournalAdapter extends RecyclerView.Adapter<JournalAdapter.JournalV
                 intent.putExtra(Intent.EXTRA_SUBJECT, tempJournal.getTitle());
                 intent.putExtra(Intent.EXTRA_STREAM, uri);
                 context.startActivity(Intent.createChooser(intent, "choose one"));
+            }
+        });
+
+        //deleting data when item is pressed long
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                int pos = holder.getAdapterPosition();
+                Toast.makeText(context, "Deleted "+pos, Toast.LENGTH_SHORT).show();
+                Journal journal1 = journalList.get(pos);
+                String imageUrl = journal1.getImageUrl();
+                collectionReference
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                                for(QueryDocumentSnapshot snapshot : task.getResult()){
+                                    String str = snapshot.getId();
+                                    DocumentReference documentReference = collectionReference.document(str);
+                                    documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @SuppressLint("NotifyDataSetChanged")
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                                            String imgURL = documentSnapshot.getString("imageUrl");
+                                            if(imageUrl.equals(imgURL)){
+                                                documentReference.delete();
+                                                Intent intent = new Intent(context, JournalListActivity.class);
+                                                context.startActivity(intent);
+                                            }
+
+                                        }
+                                    });
+                                }
+
+                            }
+                        });
+                return true;
             }
         });
 

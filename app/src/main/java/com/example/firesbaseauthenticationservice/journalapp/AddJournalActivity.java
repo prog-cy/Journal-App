@@ -308,8 +308,8 @@ public class AddJournalActivity extends AppCompatActivity {
             assert data != null;
             Bundle extrass = data.getExtras();
             imgBitMap = (Bitmap) extrass.get("data");
-            photo.setImageBitmap(imgBitMap);
             imageUri = getImageUri(AddJournalActivity.this, imgBitMap);
+            photo.setImageURI(imageUri);
         }
 
     }

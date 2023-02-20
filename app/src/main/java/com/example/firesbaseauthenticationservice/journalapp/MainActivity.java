@@ -90,34 +90,35 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
 
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                           if(task.isSuccessful()){
+                               FirebaseUser user = firebaseAuth.getCurrentUser();
 
-                            assert user != null;
-                            final String currentUserID = user.getUid();
+                               assert user != null;
+                               final String currentUserID = user.getUid();
 
-                            collectionReference
-                                    .whereEqualTo("userId", currentUserID)
-                                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                               collectionReference
+                                       .whereEqualTo("userId", currentUserID)
+                                       .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                           @Override
+                                           public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
-                                            if(error != null){
-                                                Toast.makeText(MainActivity.this, "Error...", Toast.LENGTH_SHORT).show();
-                                            }
+                                               if(error != null){
+                                                   Toast.makeText(MainActivity.this, "Error...", Toast.LENGTH_SHORT).show();
+                                               }
 
-                                            assert value != null;
-                                            if(!value.isEmpty()){
-                                                //Getting all the QuerySnapShots
-                                                for(QueryDocumentSnapshot snapshot : value){
-                                                    JournalUser journalUser = JournalUser.getInstance();
-                                                    journalUser.setUserName(snapshot.getString("userName"));
-                                                    journalUser.setUserId(snapshot.getString("userId"));
-                                                    startActivity(new Intent(MainActivity.this, JournalListActivity.class));
-                                                }
-                                            }
-                                        }
-                                    });
-
+                                               assert value != null;
+                                               if(!value.isEmpty()){
+                                                   //Getting all the QuerySnapShots
+                                                   for(QueryDocumentSnapshot snapshot : value){
+                                                       JournalUser journalUser = JournalUser.getInstance();
+                                                       journalUser.setUserName(snapshot.getString("userName"));
+                                                       journalUser.setUserId(snapshot.getString("userId"));
+                                                       startActivity(new Intent(MainActivity.this, JournalListActivity.class));
+                                                   }
+                                               }
+                                           }
+                                       });
+                           }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override

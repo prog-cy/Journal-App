@@ -115,7 +115,7 @@ public class JournalListActivity extends AppCompatActivity {
     //Getting all the user
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
 
         JournalUser journalUser = JournalUser.getInstance();
