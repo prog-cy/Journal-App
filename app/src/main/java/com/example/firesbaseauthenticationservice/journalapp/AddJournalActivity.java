@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -14,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -42,6 +44,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -62,6 +66,7 @@ public class AddJournalActivity extends AppCompatActivity {
     private TextView dateTV;
     private ImageView photo;
     private Bitmap imgBitMap;
+    private String currentPhotoPath;
 
 
     //UserId and UserName
@@ -247,7 +252,7 @@ public class AddJournalActivity extends AppCompatActivity {
             case R.id.select_image:
                 Intent galleryIntent  = new Intent(Intent.ACTION_GET_CONTENT);
                 galleryIntent.setType("image/*");
-                startActivityForResult(galleryIntent, GALLERY_CODE);
+                startActivityIfNeeded(galleryIntent, GALLERY_CODE);
                 break;
 
         }
@@ -272,11 +277,7 @@ public class AddJournalActivity extends AppCompatActivity {
 
     @SuppressLint("QueryPermissionsNeeded")
     private void captureImage() {
-
-        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePicture.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePicture, REQUEST_IMAGE_CAPTURE);
-        }
+        dispatchTakePictureIntent();
     }
 
     @Override
@@ -305,21 +306,51 @@ public class AddJournalActivity extends AppCompatActivity {
         }
 
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            assert data != null;
-            Bundle extrass = data.getExtras();
-            imgBitMap = (Bitmap) extrass.get("data");
-            imageUri = getImageUri(AddJournalActivity.this, imgBitMap);
+
+            File f = new File(currentPhotoPath);
+            imageUri = Uri.fromFile(f);
             photo.setImageURI(imageUri);
         }
 
     }
 
-    //This will convert imageBitmap into Uri.
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    @SuppressLint("QueryPermissionsNeeded")
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.firesbaseauthenticationservice.journalapp",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityIfNeeded(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
     }
 
 }
